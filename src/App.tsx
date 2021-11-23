@@ -1,31 +1,28 @@
-
 import { Home } from "./pages/Home";
-import { NewRoom } from './pages/NewRoom';
+import { NewRoom } from "./pages/NewRoom";
 
-import { BrowserRouter ,Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import { AuthContextProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+
+import { AuthContextProvider } from "./contexts/AuthContext";
 import { Room } from "./pages/Room";
 import { AdminRoom } from "./pages/AdminRoom";
-import { ProtectedRoute } from './contexts/ProtectedRoute';
-
+// import { ProtectedRoute } from './contexts/ProtectedRoute';
 
 function App() {
-  
   return (
-   <BrowserRouter>
-   <AuthContextProvider>
-     <Switch>
-     <Route path="/" exact component={Home} />
-     <Route path="/rooms/new" component={NewRoom} />
-     <Route path="/rooms/:id" component={Room} />
-     <ProtectedRoute path="/admin/rooms/:id" component={AdminRoom} />
-     </Switch>
-   </AuthContextProvider>
-   </BrowserRouter>
+    <BrowserRouter>
+      <AuthContextProvider>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/rooms/new" component={NewRoom} />
+          <Route path="/rooms/:id" component={Room} />
+          <ProtectedRoute path="/admin/rooms/:id" component={AdminRoom} />
+        </Switch>
+      </AuthContextProvider>
+    </BrowserRouter>
   );
 }
-
-
 
 export default App;

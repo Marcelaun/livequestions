@@ -3,6 +3,8 @@ import { FormEvent } from "react";
 
 import illustrationImg from "../assets/images/illustration.svg";
 import logoImg from "../assets/images/logo.svg";
+import { ReactComponent as LogoImg2 } from "../assets/images/livequestions-logo2.svg";
+
 import googleIconImg from "../assets/images/google-icon.svg";
 import { Button } from "../components/Button";
 
@@ -75,7 +77,8 @@ export function Home() {
             </nav>
           ) : null}
 
-          <img src={logoImg} alt="Letmeask" />
+          {/* <img src={Img} alt="Livequestions" /> */}
+          <LogoImg2 />
           <button onClick={handleCreateRoom} className="create-room">
             <img src={googleIconImg} alt="Logo do Google" />
             Crie sua sala com o Google

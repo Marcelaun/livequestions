@@ -50,10 +50,10 @@
     }
   }
 
-  @media only screen and (min-width: 425px) and (max-width: 700px) {
+  @media only screen and (min-width: 425px) and (max-width: 580px) {
     .content {
       > .logo-img {
-        overflow: visible;
+        display: none;
       }
 
       #exit {
@@ -108,17 +108,6 @@
         min-height: 130px;
       }
 
-      .question-warning {
-        font-size: 14px;
-        padding: 10px;
-        color: #737388;
-      }
-      .profane-warning {
-        font-size: 18px;
-        padding: 10px;
-        color: #792c30;
-      }
-
       .form-footer {
         display: flex;
         justify-content: space-between;
@@ -151,7 +140,7 @@
           button {
             background: transparent;
             border: 0;
-            color: #835afd;
+            color: #f57a00;
             text-decoration: underline;
             font-size: 14px;
             font-weight: 500;

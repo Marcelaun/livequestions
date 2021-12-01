@@ -1,7 +1,6 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-
-import logoImg from "../assets/images/logo.svg";
+import { ReactComponent as LogoImg } from "../assets/images/livequestions-logo2.svg";
 import exitImg from "../assets/images/log-out.svg";
 import { Button } from "../components/Button";
 import { Question } from "../components/Question";
@@ -17,13 +16,303 @@ type RoomParams = {
 };
 
 export function Room() {
+  const Filter = require("bad-words");
+  const filter = new Filter();
   const { user, signInWithGoogle } = useAuth();
   const params = useParams<RoomParams>();
   const roomId = params.id;
   const history = useHistory();
+  const [questionLimit, setQuestionLimit] = useState<number>(0);
   const [newQuestion, setNewQuestion] = useState("");
 
   const { title, questions } = useRoom(roomId);
+
+  const newBadWords = [
+    "Anus",
+    "Baba-ovo",
+    "Babaovo",
+    "Babaca",
+    "Bagos",
+    "Baitola",
+    "Bebum",
+    "Besta",
+    "Bicha",
+    "Bisca",
+    "Bixa",
+    "Boazuda",
+    "Boceta",
+    "Boco",
+    "Boiola",
+    "Bolagato",
+    "Boquete",
+    "Bolcat",
+    "Bosseta",
+    "Bosta",
+    "Bostana",
+    "Brioco",
+    "Bronha",
+    "Buceta",
+    "Bunda",
+    "Bunduda",
+    "Burra",
+    "Burro",
+    "Busseta",
+    "Cadela",
+    "Caga",
+    "Cagado",
+    "Cagao",
+    "Cagona",
+    "Canalha",
+    "Caralho",
+    "Casseta",
+    "Cassete",
+    "Checheca",
+    "Chereca",
+    "Chibumba",
+    "Chibumbo",
+    "Chifruda",
+    "Chifrudo",
+    "Chota",
+    "Chochota",
+    "Chupada",
+    "Chupado",
+    "Clitoris",
+    "Cocaina",
+    "Coco",
+    "Corna",
+    "Corno",
+    "Cornuda",
+    "Cornudo",
+    "Cretina",
+    "Cretino",
+    "Cruz-credo",
+    "Cu",
+    "Culhao",
+    "Curalho",
+    "Cuzao",
+    "Cuzuda",
+    "Cuzudo",
+    "Debil",
+    "Debiloide",
+    "Defunto",
+    "Difunto",
+    "Doida",
+    "Doido",
+    "Egua",
+    "Escrota",
+    "Escroto",
+    "Fedida",
+    "Fedido",
+    "Fedorenta",
+    "Feiosa",
+    "Feioso",
+    "Feioza",
+    "Feiozo",
+    "Felacao",
+    "Foda",
+    "Fodao",
+    "Fode",
+    "Fodida",
+    "Fodido",
+    "Fornica",
+    "Fudendo",
+    "Fudecao",
+    "Fudida",
+    "Fudido",
+    "Furão",
+    "Furnica",
+    "Furnicar",
+    "Furona",
+    "Gaiata",
+    "Gaiato",
+    "Gay",
+    "Gonorrea",
+    "Gonorreia",
+    "Gosma",
+    "Gosmenta",
+    "Gosmento",
+    "Grelinho",
+    "Grelo",
+    "Idiota",
+    "Imbecil",
+    "Iscrota",
+    "Iscroto",
+    "Ladra",
+    "Ladroeira",
+    "Ladrona",
+    "Lalau",
+    "Leprosa",
+    "Leproso",
+    "Lésbica",
+    "Macaca",
+    "Macaco",
+    "Machona",
+    "Machorra",
+    "Manguaca",
+    "Mangua",
+    "Masturba",
+    "Meleca",
+    "Merda",
+    "Mija",
+    "Mijada",
+    "Mijado",
+    "Mijo",
+    "Mocrea",
+    "Mocreia",
+    "Moleca",
+    "Moleque",
+    "Mondronga",
+    "Mondrongo",
+    "Naba",
+    "Nadega",
+    "Olhota",
+    "Otaria",
+    "Ot-ria",
+    "Otario",
+    "Ot-rio",
+    "Paca",
+    "Paspalha",
+    "Paspalhao",
+    "Paspalho",
+    "Pau",
+    "Peia",
+    "Peido",
+    "Pemba",
+    "Pênis",
+    "Pentelha",
+    "Pentelho",
+    "Perereca",
+    "Peru",
+    "Pica",
+    "Picao",
+    "Pilantra",
+    "Piranha",
+    "Piroca",
+    "Piroco",
+    "Piru",
+    "Porra",
+    "Prega",
+    "Prostibulo",
+    "Prost-bulo",
+    "Prostituta",
+    "Prostituto",
+    "Punheta",
+    "Punhetao",
+    "Pus",
+    "Pustula",
+    "Puta",
+    "Puto",
+    "Puxa-saco",
+    "Puxasaco",
+    "Rabao",
+    "Rabo",
+    "Rabuda",
+    "Rabudao",
+    "Rabudo",
+    "Rabudona",
+    "Racha",
+    "Rachada",
+    "Rachadao",
+    "Rachadinha",
+    "Rachadinho",
+    "Rachado",
+    "Ramela",
+    "Remela",
+    "Retardada",
+    "Retardado",
+    "Ridícula",
+    "Rola",
+    "Rolao",
+    "Roludo",
+    "Roluda",
+    "Roludona",
+    "Roludao",
+    "Rolinha",
+    "Rosca",
+    "Sacana",
+    "Safada",
+    "Safado",
+    "Safadona",
+    "Safadao",
+    "Sapatao",
+    "Sifilis",
+    "Siririca",
+    "Tarada",
+    "Taradona",
+    "Taradao",
+    "Tarado",
+    "Tezao",
+    "Tezuda",
+    "Tezudo",
+    "Trocha",
+    "Trolha",
+    "Troucha",
+    "Trouxa",
+    "Troxa",
+    "Vaca",
+    "Vagabunda",
+    "Vagabundo",
+    "Vagina",
+    "Veada",
+    "Veadao",
+    "Veado",
+    "Viada",
+    "Víado",
+    "Viadao",
+    "Xavasca",
+    "Xerereca",
+    "Xexeca",
+    "Xibiu",
+    "Xibumba",
+    "Xota",
+    "Xochota",
+    "Xoxota",
+    "Xana",
+    "Xaninha",
+  ];
+
+  filter.addWords(...newBadWords);
+
+  filter.clean(
+    "AnusBaba-ovoBabaovoBabacaBacuraBagosBaitolaBebumBestaBichaBiscaBixaBoazudaBocetaBocoBoiolaBolagatoBoqueteBolcatBossetaBostaBostanaBrechaBrexaBriocoBronhaBucaBucetaBundaBundudaBurraBurroBussetaCachorraCachorroCadelaCagaCagadoCagaoCagonaCanalhaCaralhoCassetaCasseteChechecaCherecaChibumbaChibumboChifrudaChifrudoChotaChochotaChupadaChupadoClitorisCocainaCocoCornaCornoCornudaCornudoCorruptaCorruptoCretinaCretinoCruz-credoCuCulhaoCuralhoCuzaoCuzudaCuzudoDebilDebiloideDefuntoDemonioDifuntoDoidaDoidoEguaEscrotaEscrotoEsporradaEsporradoEsporroEstupidaEstupidezEstupidoFedidaFedidoFedorFedorentaFeiaFeioFeiosaFeiosoFeiozaFeiozoFelacaoFendaFodaFodaoFodeFodidaFodidoFornicaFudendoFudecaoFudidaFudidoFuradaFuradoFurãoFurnicaFurnicarFuroFuronaGaiataGaiatoGayGonorreaGonorreiaGosmaGosmentaGosmentoGrelinhoGreloHomo-sexualHomossexualHomossexualIdiotaIdioticeImbecilIscrotaIscrotoJapaLadraLadraoLadroeiraLadronaLalauLeprosaLeprosoLésbicaMacacaMacacoMachonaMachorraManguacaMangua¦aMasturbaMelecaMerdaMijaMijadaMijadoMijoMocreaMocreiaMolecaMolequeMondrongaMondrongoNabaNadegaNojeiraNojentaNojentoNojoOlhotaOtariaOt-riaOtarioOt-rioPacaPaspalhaPaspalhaoPaspalhoPauPeiaPeidoPembaPênisPentelhaPentelhoPererecaPeruPicaPicaoPilantraPiranhaPirocaPirocoPiruPorraPregaProstibuloProst-buloProstitutaProstitutoPunhetaPunhetaoPusPustulaPutaPutoPuxa-sacoPuxasacoRabaoRaboRabudaRabudaoRabudoRabudonaRachaRachadaRachadaoRachadinhaRachadinhoRachadoRamelaRemelaRetardadaRetardadoRidículaRolaRolinhaRoscaSacanaSafadaSafadoSapataoSifilisSiriricaTaradaTaradoTestudaTezaoTezudaTezudoTrochaTrolhaTrouchaTrouxaTroxaVacaVagabundaVagabundoVaginaVeadaVeadaoVeadoViadaVíadoViadaoXavascaXererecaXexecaXibiuXibumbaXotaXochotaXoxotaXanaXaninha"
+  );
+  console.log(filter.isProfane(newQuestion));
+
+  useEffect(() => {
+    setQuestionLimit(Number(window.localStorage.getItem("questionLimit")));
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("questionLimit", String(questionLimit));
+  }, [questionLimit]);
+
+  useEffect(() => {
+    const interval = 300000;
+
+    function reset() {
+      console.log("passei por aqui");
+      localStorage.endTime = +new Date() + interval;
+      console.log("passei por aqui");
+    }
+
+    if (questionLimit === 5) {
+      if (!localStorage.endTime) {
+        reset();
+      }
+
+      const setIntervalId = setInterval(function () {
+        let remaining = localStorage.endTime - Number(new Date());
+        if (remaining >= 0) {
+          console.log(Math.floor(remaining / 1000));
+        } else {
+          setQuestionLimit(0);
+          reset();
+          clearInterval(setIntervalId);
+        }
+      }, 100);
+    }
+  }, [questionLimit]);
+  console.log("limite de questões", questionLimit);
 
   async function handleSignIn(event: FormEvent) {
     event.preventDefault();
@@ -60,6 +349,7 @@ export function Room() {
     await database.ref(`rooms/${roomId}/questions`).push(question);
 
     setNewQuestion("");
+    setQuestionLimit(questionLimit + 1);
   }
 
   async function handleLikeQuestion(
@@ -81,7 +371,7 @@ export function Room() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
+          <LogoImg className="logo-img" />
           <RoomCode code={params.id} />
           <img
             src={exitImg}
@@ -102,10 +392,23 @@ export function Room() {
 
         <form onSubmit={handleSendQuestion}>
           <textarea
+            maxLength={170}
             placeholder="O que você quer perguntar?"
             onChange={(event) => setNewQuestion(event.target.value)}
             value={newQuestion}
           />
+          {questionLimit === 5 ? (
+            <p className="question-warning">
+              Wow! você perguntou bastante!, mas para organizar melhor, aguarde
+              5 min para que outros também possam perguntar!
+            </p>
+          ) : null}
+
+          {filter.isProfane(newQuestion) ? (
+            <p className="profane-warning">
+              Ops! nada de palavrão nas perguntas!
+            </p>
+          ) : null}
 
           <div className="form-footer">
             {user?.isLoggedIn ? (
@@ -120,7 +423,14 @@ export function Room() {
               </span>
             )}
 
-            <Button type="submit" disabled={!user?.isLoggedIn}>
+            <Button
+              type="submit"
+              disabled={
+                !user?.isLoggedIn ||
+                questionLimit === 5 ||
+                filter.isProfane(newQuestion)
+              }
+            >
               Enviar Pergunta
             </Button>
           </div>

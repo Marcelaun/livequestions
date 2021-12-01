@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        font-size: 12px;
+        font-family: Rajdhani;
+      }
+
+      .cls-1 {
+        fill: #282828;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #1e2444;
+        stroke-width: 26.52px;
+        fill-rule: evenodd;
+      }
+
+      .cls-3 {
+        fill: #7f5218;
+      }
+    </style>
+  </defs>
+  <text id="live" class="cls-1" transform="translate(475.052 633.807) scale(12.266)">live</text>
+  <path id="Triângulo_1" data-name="Triângulo 1" class="cls-2" d="M1197.23,419.562l154.11,240.813H1043.12Z"/>
+  <text id="questions" class="cls-3" transform="translate(668.052 633.807) scale(12.266)">questions</text>
+</svg>

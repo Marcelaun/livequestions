@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { FormEvent } from "react";
 
 import illustrationImg from "../assets/images/illustration.svg";
-import logoImg from "../assets/images/logo.svg";
+import { ReactComponent as LogoImg } from "../assets/images/livequestions-logo2.svg";
 import { Button } from "../components/Button";
 import { useAuth } from "../hooks/useAuth";
 
@@ -50,7 +50,7 @@ export function NewRoom() {
 
       <main>
         <div className="main-content">
-          <img src={logoImg} alt="Letmeask" />
+          <LogoImg />
           <h2>Criar uma nova sala</h2>
           <form onSubmit={handleCreateRoom}>
             <input

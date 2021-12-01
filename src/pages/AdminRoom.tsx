@@ -1,17 +1,16 @@
 import { useHistory, useParams } from "react-router-dom";
 
-import logoImg from "../assets/images/logo.svg";
+import { ReactComponent as LogoImg } from "../assets/images/livequestions-logo2.svg";
 import deleteImg from "../assets/images/delete.svg";
 import checkImg from "../assets/images/check.svg";
 import answerImg from "../assets/images/answer.svg";
 import { database } from "../services/firebase";
-
 import { Button } from "../components/Button";
 import { AdminQuestion } from "../components/AdminQuestion";
 import { RoomCode } from "../components/RoomCode";
 import { useRoom } from "../hooks/useRoom";
 
-import "../styles/room.scss";
+import "../styles/admin-room.scss";
 
 type RoomParams = {
   id: string;
@@ -54,7 +53,7 @@ export function AdminRoom() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
+          <LogoImg className="logo-img" />
           <div>
             <RoomCode code={params.id} />
             <Button isOutlined onClick={handleEndRoom}>
